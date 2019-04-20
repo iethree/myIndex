@@ -1,0 +1,30 @@
+
+extends myIndex-head
+
+block content
+	div.container.justpadding
+		div.columns
+			div.column.is-one-quarter
+				aside.menu
+					p.menu-label#listToggle 
+						span User Indexes 
+						i.fa.fa-caret-up#caret
+						ul.menu-list
+							for index in indexes
+								li
+									a.index-tab(data="#{index.symbols}") #{index.name}
+					
+			div.column.is-three-quarters
+				div
+					canvas#chart.has-background-light(height="200", width = "300")
+				div#taglist
+
+block scripts
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js')
+	script(src='/js/moment.js')
+	script(src='/js/myindex-client.js')
+	script(src='/js/browse-client.js')
+	
+	
+	

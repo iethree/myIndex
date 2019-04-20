@@ -1,0 +1,57 @@
+
+
+head
+	title=myIndex
+	meta(charset='utf-8')
+	meta(name='viewport', content='width=device-width, initial-scale=1.0')
+	meta(name='theme-color', content='#3273dc')
+	link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css')
+	link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css')
+	link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css')
+	link(rel='stylesheet', href='/css/myindex.css')
+body
+
+	section.hero.is-link.is-bold.is-fullheight
+		div.hero-head
+			nav.navbar(role="navigation")
+				div.navbar-brand.is-link
+					a.navbar-item(href="/") myIndex
+					button.button.navbar-burger.is-link
+						span
+						span
+						span
+			
+				div.navbar-menu
+					div.navbar-end
+						a.navbar-item(href="/") Home
+						a.navbar-item(href="/myindex") Make
+						a.navbar-item(href="/browse") Browse
+						a.navbar-item(href="/about") About
+		div.hero-body
+			div.container
+				div.columns.is-vcentered
+					div.column.is-one-third
+						h1.title.animated.fadeInUp myIndex
+						h2.subtitle.animated.fadeInUp a stock index - your way
+						br
+						div.buttons
+							a(href="/myindex").button.is-warning.animated.fadeIn make your own
+							a(href="/browse").button.is-warning.animated.fadeIn browse indexes
+					div.column.is-half.is-offset-2.has-text-centered
+						div.has-text-centered.animated.fadeIn
+							canvas#chart.has-background-light(height="100", width="120")
+						br
+						progress.progress.is-warning(value="0", max="100") Loading
+						div#samples
+							for sample in indexes
+								span.hidden(name="#{sample.name}", data="#{sample.symbols}")
+
+block scripts
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js')
+	script(src='/js/moment.js')
+	script(src='/js/myindex-client.js')
+	script(src='/js/home-client.js')
+	
+	
+	

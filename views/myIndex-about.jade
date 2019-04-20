@@ -1,0 +1,25 @@
+
+extends myIndex-head
+
+block content
+	div.container.justpadding
+		div.columns.is-centered
+			div.column.is-half
+				h3.title.is-4 About myIndex
+				p.content This is a project born of a love for graphs and wondering about how weird combinations of companies' stocks are performing in the aggregate. Indexes are weighted by market capitalization. The y-axis is percent change.
+				
+				h3.title.is-4 Disclaimer
+				p.content Don't even think about relying on this for any sort of financial transaction.
+				
+				h3.title.is-4 Data
+				p.content Data provided for free by #[a(href='https://iextrading.com/developer/') IEX]. View IEX's #[a(href='https://iextrading.com/api-exhibit-a/') Terms of Use].						
+
+block scripts
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js')
+	script(src='/js/moment.js')
+	script(src='/js/myindex-client.js')
+	script(src='/js/browse-client.js')
+	
+	
+	

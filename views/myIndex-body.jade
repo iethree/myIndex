@@ -1,0 +1,60 @@
+
+extends myIndex-head
+
+block content
+	div.modal
+		div.modal-background
+		div.modal-content
+			div.notification
+				h4.title.is-4 Save Index
+				input.input#indexName(placeholder="index name")
+				div.spacer
+				div.buttons.is-right
+					button.button.is-link#save2 save
+				
+	div.container.justpadding
+		div.max1000.centermargin
+			canvas#chart.has-background-light(height="200", width = "300")
+		br
+		div.columns.is-mobile
+			div.column.is-narrow.is-narrow-mobile
+				h3.title.is-4 Add Stocks
+			div.column
+				div#period.buttons.has-addons.is-right
+					span#save.button
+						span.icon
+							i.fa.fa-save
+						span save
+					span#new.button
+						span.icon
+							i.fa.fa-file
+						span new
+		
+		div.columns
+			div.column.is-one-third
+				div.field.has-addons
+					div.control.is-expanded.has-icons-right
+						input#newstock.input(type="text", placeholder="add stock symbol")
+						span.icon.is-small.is-right
+							i#validcheck
+					div.control
+						button#add.button.is-link(role="submit") add
+				br
+				div#errorMsg
+				
+			div.column.is-two-thirds
+				div.box.field.is-grouped.is-grouped-multiline#taglist
+		br
+		br
+		br
+block scripts
+	script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js')
+	script(src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.0/Chart.bundle.min.js')
+	script(src='/js/moment.js')
+	script(src='/js/typeahead.bundle.min.js')
+	script(src='/js/typeahead.jquery.js')
+	script(src='/js/myindex-client.js')
+	script(src='/js/makeindex-client.js')
+	
+	
+	
