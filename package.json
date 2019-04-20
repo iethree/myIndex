@@ -2,7 +2,7 @@
   "name": "myindex",
   "version": "1.0.0",
   "description": "A Stock Index, your way",
-  "main": "fetch-stocks.js",
+  "main": "myIndex.js",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "^1.4.3",
