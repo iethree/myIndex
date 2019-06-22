@@ -1,0 +1,50 @@
+
+$primary: hsl(200, 65%, 35%)
+$link: hsl(200, 65%, 35%)
+$success: hsl(141, 50%, 39%)
+$danger: hsl(0, 70%, 47%)
+$warning: hsl(49, 80%, 50%)
+
+$grey-lightest: hsl(0, 0%, 95%)
+$grey-light: hsl(0, 0%, 71%)
+$grey: hsl(0, 0%, 40%)
+$grey-dark: hsl(0, 0%, 29%)
+$grey-darkest: hsl(0, 0%, 21%)
+
+$white: hsl(0,0, 100%)
+$black: hsl(0,0,0)
+
+@import "../node_modules/bulma/bulma.sass"
+
+body
+   background-color: $grey-lightest
+   min-height: 100vh
+.summaryDisplay
+   @extend .box
+   margin-top: 20px
+
+.main
+   padding: 10px
+   text-align: center
+.main > div
+   max-width: 500px
+   margin: 20px auto
+.indent
+   padding-left: 20px
+.container-fluid
+   margin: 5px
+.title.is-3
+   margin-top: 20px
+
+.read-item
+   display: flex
+   justify-content: space-between
+   @extend .box
+   padding: 10px
+   .read-left, .read-right
+      display: inline-block
+   .read-left
+      text-align: left
+   .read-right
+      text-align: right
+      margin-left: 40px
