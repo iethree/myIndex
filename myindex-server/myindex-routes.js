@@ -37,7 +37,7 @@ router.post('data/getIndexList', (req, res, next)=>{
 	.catch(err=>res.send(err).status(200));
 });
 
-router.post('data/getIndexData/:name/:duration?', (req, res, next=>{
+router.post('data/getIndexData/:name/:duration?', (req, res, next)=>{
 	data.getIndexData(req.params.name, req.params.duration)
 	.then(result=>res.send(result).status(200))
 	.catch(err=>res.send(err).status(200));

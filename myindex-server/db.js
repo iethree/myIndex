@@ -3,6 +3,8 @@ require('dotenv').config();
 const dbserver = require('mysql');
 const log = require ('./log.js');
 
+log.debug(process.env.DB_HOST);
+
 var db = dbserver.createConnection({
 	host: process.env.DB_HOST,
 	user: process.env.DB_USER,
@@ -11,7 +13,7 @@ var db = dbserver.createConnection({
 });
 
 db.connect((err)=>{
-	if (err) log.err('database connection error');
+	if (err) log.err('database connection error', err);
 	else 		log.success('databse connection established');
  });
 
