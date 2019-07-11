@@ -1,5 +1,5 @@
-var db = require("./db.js");
-var log = reqire('./log.js');
+const db = require("./db.js");
+const log = require('./log.js');
 
 /**
  * gets a single symbol's data
@@ -8,10 +8,10 @@ var log = reqire('./log.js');
  * @param {number} duration days of prices
  * @returns {promise} resolves data or rejects error
  */
-export async function getSymbol(symbol, duration = 90){
-   var query = `select * from prices where symbol="${symbol}" LIMIT ${duration}`;
+exports.getSymbol =  async (symbol, duration = 90)=>{
+   let query = `select * from prices where symbol="${symbol}" LIMIT ${duration}`;
 
-   return query(query);
+   return db(query);
 }
 
 /**
@@ -21,19 +21,19 @@ export async function getSymbol(symbol, duration = 90){
  * @param {number} duration days of prices
  * @returns {promise} resolves data or rejects error
  */
-export async function getSymbols(symbols, duration = 90){
+exports.getSymbols =  async (symbols, duration = 90)=>{
 	var symbolList= symbols.join("','");
-   var query = `select * from prices where symbol IN ('${symbolList}') ORDER BY date DESC LIMIT ${(duration*symbols.length)}`;
-   return query(query);
+   let query = `select * from prices where symbol IN ('${symbolList}') ORDER BY date DESC LIMIT ${(duration*symbols.length)}`;
+   return db(query);
 }
 /**
  * returns list of all symbols currenly in the database
  * 
  * @returns {promise} resolves array of symbol objects or rejects error
  */
-export async function getSymbolList(){
-   var query = "select * from symbols";
-   return query(query);
+exports.getSymbolList = async ()=>{
+   let query = "select * from symbols";
+   return db(query);
 }
 
 /**
@@ -42,33 +42,17 @@ export async function getSymbolList(){
  * @param {string} name new custom index name
  * @param {array} symbols array string symbols
  */
-export async function saveIndex(name, symbols){
-   var query = `INSERT INTO indexes (name, symbols) VALUES ('${name}','${symbols.join(',')}') ON DUPLICATE KEY UPDATE symbols=VALUES(symbols)`;
-   return query(query);
+exports.saveIndex = async (name, symbols)=>{
+   let query = `INSERT INTO indexes (name, symbols) VALUES ('${name}','${symbols.join(',')}') ON DUPLICATE KEY UPDATE symbols=VALUES(symbols)`;
+   return db(query);
 }
 
-export async function getIndexList(){
-   var query = `select * from indexes`;
-   return query(query);
+exports.getIndexList = async()=>{
+   let query = `select * from indexes`;
+   return db(query);
 }
 
-export async function getIndexData(name, duration = 90){
-   var query = `return * from indexData WHERE name=${name} LIMIT ${duration}`;
-   return query(query)
-}
-
-/**
- * helper function to make database queries
- * 
- * @param {string} query mysql query string
- * @returns {promise} resolves data or rejects error
- */
-async function query(query){
-   return new Promise((resolve, reject)=>{
-      db.query(query, function(err, results, fields){
-         if (err)            reject({status: false, message: err});
-         if (results.length) resolve({status: true, data: results})
-         else                reject({status: false});
-      });
-   });
+exports.getIndexData = async(name, duration = 90)=>{
+   let query = `return * from indexData WHERE name=${name} LIMIT ${duration}`;
+   return db(query);
 }

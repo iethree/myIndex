@@ -17,9 +17,21 @@ db.connect((err)=>{
 	else 		log.success('databse connection established');
  });
 
-//keep connection alive
-setInterval(function () {
-    db.query('SELECT 1');
-}, 60*1000);
 
-module.exports = db;
+ /**
+ * helper function to make database queries
+ * 
+ * @param {string} query mysql query string
+ * @returns {promise} resolves data or rejects error
+ */
+var query= async(query)=>{
+   return new Promise((resolve, reject)=>{
+      db.query(query, function(err, results, fields){
+         if (err)            reject({status: false, message: err});
+         if (results.length) resolve({status: true, data: results})
+         else                reject({status: false});
+      });
+   });
+}
+
+module.exports = query;

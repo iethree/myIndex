@@ -1,4 +1,3 @@
-
 var express = require('express');
 var router = express.Router();
 var data = require('./myindex-data.js');
@@ -10,7 +9,7 @@ router.get('data/symbolData/:symbols/:duration?', (req, res, next)=>{
 	else
 		symbols = req.params.symbols;
 
-	data.getSymbols(symbols, req.params.duration || 90)
+	data.getSymbols(symbols, req.params.duration)
 	.then(result=>res.send(result).status(200))
 	.catch(err=>res.send(err).status(400));
 });

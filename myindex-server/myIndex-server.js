@@ -1,11 +1,12 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const index = require('./myindex-routes');
+const app = express();
 
-var index = require('./myindex-routes');
-var app = express();
+const PORT = 3003;
 
 // uncomment after placing your favicon in /public
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
@@ -34,6 +35,6 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(3003,function(){console.log("myindex on port 3003");});
+app.listen(PORT, ()=>console.log("myindex on port", PORT, "at", new Date() ) );
 
 module.exports = app;
