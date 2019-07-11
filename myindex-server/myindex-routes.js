@@ -3,44 +3,40 @@ var express = require('express');
 var router = express.Router();
 var data = require('./myindex-data.js');
 
-router.post('data/getSymbolData/:symbol/:duration?', (req, res, next)=>{
-	
-	query = "select * from prices where symbol='"+req.params.symbol+"' LIMIT "+(req.params.duration || 90);
-	
-	data.getSymbol(req.params.symbol, req.params.duration)
+router.get('data/symbolData/:symbols/:duration?', (req, res, next)=>{
+	var symbols;
+	if(req.params.symbols.includes(','))
+		symbols = req.params.symbols.split(',');
+	else
+		symbols = req.params.symbols;
+
+	data.getSymbols(symbols, req.params.duration || 90)
 	.then(result=>res.send(result).status(200))
-	.catch(err=>res.send(err).status(200));
+	.catch(err=>res.send(err).status(400));
 });
 
-router.post('data/getSymbolsData/:symbols/:duration?', (req, res, next)=>{
-	
-	data.getSymbols(req.params.symbols.split(','), duration)
-	.then(result=>res.send(result).status(200))
-	.catch(err=>res.send(err).status(200));
-});
-
-router.post('data/getSymbolList', (req, res, next)=>{
+router.get('data/symbolList', (req, res, next)=>{
 	data.getSymbolList()
 	.then(result=>res.send(result).status(200))
-	.catch(err=>res.send(err).status(200));
+	.catch(err=>res.send(err).status(400));
 });
 
-router.post('data/saveIndex', (req, res, next)=>{
+router.post('data/index', (req, res, next)=>{
 	data.saveIndex(req.body.name, req.body.symbols)
-	.then(result=>res.send(result).status(200))
-	.catch(err=>res.send(err).status(200));
+	.then(result=>res.send(result).status(201))
+	.catch(err=>res.send(err).status(400));
 });
 
-router.post('data/getIndexList', (req, res, next)=>{
+router.get('data/index', (req, res, next)=>{
 	data.getIndexList()
 	.then(result=>res.send(result).status(200))
-	.catch(err=>res.send(err).status(200));
+	.catch(err=>res.send(err).status(400));
 });
 
-router.post('data/getIndexData/:name/:duration?', (req, res, next)=>{
+router.get('data/index/:name/:duration?', (req, res, next)=>{
 	data.getIndexData(req.params.name, req.params.duration)
 	.then(result=>res.send(result).status(200))
-	.catch(err=>res.send(err).status(200));
+	.catch(err=>res.send(err).status(400));
 });
 
 // catchall, must be last 
