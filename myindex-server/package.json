@@ -10,12 +10,18 @@
     "date-fns": "^1.30.1",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
+    "jest": "^24.8.0",
+    "lodash": "^4.17.14",
     "morgan": "^1.9.1",
     "mysql": "^2.17.1",
     "request": "^2.88.0",
     "serve-favicon": "^2.5.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.5.4",
+    "@babel/preset-env": "^7.5.4",
+    "babel-jest": "^24.8.0"
+  },
   "scripts": {
     "start": "myindex-server.js",
     "test": "jest"

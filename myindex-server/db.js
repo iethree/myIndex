@@ -28,10 +28,20 @@ var query= async(query)=>{
    return new Promise((resolve, reject)=>{
       db.query(query, function(err, results, fields){
          if (err)            reject({status: false, message: err});
+         else if (results.length) resolve({status: true, data: results})
+         else                resolve({status: true});
+      });
+   }).catch(log.err);
+}
+
+var queryData= async(query, data)=>{
+   return new Promise((resolve, reject)=>{
+      db.query(query, data, function(err, results, fields){
+         if (err)            reject({status: false, message: err});
          if (results.length) resolve({status: true, data: results})
          else                reject({status: false});
       });
    });
 }
 
-module.exports = query;
+module.exports = {query: query, queryData: queryData};
