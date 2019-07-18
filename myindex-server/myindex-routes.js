@@ -38,6 +38,13 @@ router.get('data/index/:name/:duration?', (req, res, next)=>{
 	.catch(err=>res.send(err).status(400));
 });
 
+router.delete('data/index/:name', (req, res, next)=>{
+	data.deleteIndex(req.params.name)
+	.then(result=>res.send(result).status(200))
+	.catch(err=>res.send(err).status(400));
+});
+
+
 // catchall, must be last 
 router.get('*', (req,res) =>{
 	res.sendFile(__dirname+'/public/index.html');

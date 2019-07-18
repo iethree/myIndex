@@ -27,19 +27,32 @@ db.connect((err)=>{
 var query= async(query)=>{
    return new Promise((resolve, reject)=>{
       db.query(query, function(err, results, fields){
-         if (err)            reject({status: false, message: err});
-         else if (results.length) resolve({status: true, data: results})
-         else                resolve({status: true});
+         if (err)            
+            reject({status: false, message: err});
+         else if (results) 
+            resolve({status: true, data: results})
+         else                
+            reject({status: false});
       });
    }).catch(log.err);
 }
 
+ /**
+ * helper function to make database queries with an array of data
+ * 
+ * @param {string} query mysql query string
+ * @param {array} data two-dimensional array of values
+ * @returns {promise} resolves data or rejects error
+ */
 var queryData= async(query, data)=>{
    return new Promise((resolve, reject)=>{
-      db.query(query, data, function(err, results, fields){
-         if (err)            reject({status: false, message: err});
-         if (results.length) resolve({status: true, data: results})
-         else                reject({status: false});
+      db.query(query, [data], function(err, results, fields){
+         if (err)            
+            reject({status: false, message: err});
+         else if (results) 
+            resolve({status: true, data: results})
+         else                
+            reject({status: false});
       });
    });
 }

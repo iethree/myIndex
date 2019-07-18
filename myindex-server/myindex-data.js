@@ -49,38 +49,35 @@ exports.saveIndex = async (indexName, symbols)=>{
 }
 
 exports.saveIndexData = async (indexName, days)=>{
-   return new Promise(async (resolve, reject)=>{
+   let query = `SELECT symbols FROM indexes WHERE name='${indexName}'`;
+   let indexSymbols = await db.query(query);
+   
+   if(!indexSymbols.status){
+      reject({status: false, message: 'index not found'});
+      return;
+   }
+   
+   indexSymbols = indexSymbols.data[0].symbols;
 
-      let query = `SELECT symbols FROM indexes WHERE name='${indexName}'`;
-      let indexSymbols = await db.query(query);
-      
-      if(!indexSymbols.status){
-         reject({status: false, message: 'index not found'});
-         return;
-      }
-      
-      indexSymbols = indexSymbols.data[0].symbols;
+   let priceData = await exports.getSymbols(indexSymbols.split(','), days);
 
-      let priceData = await exports.getSymbols(indexSymbols.split(','), days);
+   if(!priceData.status){
+      reject({status: false, message: 'error getting prices'});
+      return;
+   }
+   let indexPrices = calculateIndex(priceData.data);
 
-      if(!priceData.status){
-         reject({status: false, message: 'error getting prices'});
-         return;
-      }
-      let indexPrices = calculateIndex(priceData.data);
-
-      if(!indexPrices.length){
-         reject({status: false, message: 'error calculating index'});
-         return;
-      }
-      //map objects to arrays for query
-      let writeData = indexPrices.map(item=>{
-         return [item.name, item.date, item.mktcap];
-      })
-      query = `INSERT INTO indexData (name, date, mktcap) VALUES ? `;
-      
-      resolve(db.queryData(query, writeData));
+   if(!indexPrices.length){
+      reject({status: false, message: 'error calculating index'});
+      return;
+   }
+   //map objects to arrays for query
+   let writeData = indexPrices.map(item=>{
+      return [indexName, item.date, item.mktcap];
    });
+   query = `INSERT INTO indexdata (name, date, mktcap) VALUES ?`;
+   
+   return db.queryData(query, writeData);
 }
 
 exports.getIndexList = async()=>{
@@ -89,6 +86,20 @@ exports.getIndexList = async()=>{
 }
 
 exports.getIndexData = async(name, duration = 90)=>{
-   let query = `SELECT * FROM indexData WHERE name='${name}' ORDER BY date DESC LIMIT ${duration}`;
+   let query = `SELECT * FROM indexdata WHERE name='${name}' ORDER BY date DESC LIMIT ${duration}`;
    return db.query(query);
+}
+
+exports.deleteIndex = async(name)=>{
+   return new Promise(async (resolve, reject)=>{
+      let query1 = `DELETE from indexes WHERE name='${name}'`;
+      let query2 = `DELETE from indexData WHERE name='${name}'`;
+
+      var results = await Promise.all([db.query(query1), db.query(query2)]);
+      
+      if(results[0].status && results[1].status)
+         resolve({status:true, data: results[1].data.affectedRows });
+      else
+         reject({status: false});
+   });
 }
