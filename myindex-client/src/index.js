@@ -46,7 +46,7 @@ export default function App(props){
         <Route path="/about" component={About} />
         <Route path="/browse" component={Browse} />
         <Route path="/make" component={Make} />
-        <Route path="/" component={Home} />
+        <Route path="/" render={()=><Home indexes={indexes} />} />
       </Switch>
       <Footer />
     </Router>

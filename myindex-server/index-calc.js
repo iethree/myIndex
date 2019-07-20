@@ -1,5 +1,6 @@
 //index-calc.js
 const datefns = require('date-fns');
+const tz = require('date-fns-timezone');
 const log = require('./log');
 const _ = require('lodash');
 
@@ -20,7 +21,7 @@ const _ = require('lodash');
 function calculate(prices){
    var uniqueStocks = _.uniqBy(prices, 'symbol').length;
    var index = [], dayPrices = [];
-   var date = new Date(prices[0].date*1000);
+   var date = tz.utcToZonedTime( new Date(prices[0].date*1000), ''
 
    for (let price of prices){
       if(datefns.isSameDay(date, new Date(price.date*1000))) 

@@ -51,7 +51,7 @@ exports.saveIndex = async (indexName, symbols)=>{
 exports.saveIndexData = async (indexName, days)=>{
    let query = `SELECT symbols FROM indexes WHERE name='${indexName}'`;
    let indexSymbols = await db.query(query);
-   
+
    if(!indexSymbols.status){
       reject({status: false, message: 'index not found'});
       return;
@@ -62,20 +62,20 @@ exports.saveIndexData = async (indexName, days)=>{
    let priceData = await exports.getSymbols(indexSymbols.split(','), days);
 
    if(!priceData.status){
-      reject({status: false, message: 'error getting prices'});
-      return;
+      return({status: false, message: 'error getting prices'});
    }
    let indexPrices = calculateIndex(priceData.data);
 
    if(!indexPrices.length){
-      reject({status: false, message: 'error calculating index'});
-      return;
+      return({status: false, message: 'error calculating index'});
    }
    //map objects to arrays for query
    let writeData = indexPrices.map(item=>{
       return [indexName, item.date, item.mktcap];
    });
-   query = `INSERT INTO indexdata (name, date, mktcap) VALUES ?`;
+   log.info(writeData[0][0], 'prices:', writeData.length );
+   
+   query = `INSERT INTO indexdata (name, date, mktcap) VALUES ? ON DUPLICATE KEY UPDATE date=date`;
    
    return db.queryData(query, writeData);
 }
