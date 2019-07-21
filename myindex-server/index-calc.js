@@ -21,9 +21,9 @@ const _ = require('lodash');
 function calculate(prices){
    var uniqueStocks = _.uniqBy(prices, 'symbol').length;
    var index = [], dayPrices = [];
-   var date = tz.utcToZonedTime( new Date(prices[0].date*1000), ''
+   var date = new Date(prices[0].date*1000);
 
-   for (let price of prices){
+   for(let price of prices){
       if(datefns.isSameDay(date, new Date(price.date*1000))) 
          dayPrices.push(price.mktcap);
       else{

@@ -44,8 +44,9 @@ exports.getSymbolList = async ()=>{
  * @param {array} symbols array string symbols
  */
 exports.saveIndex = async (indexName, symbols)=>{
-   let query = `INSERT INTO indexes (name, symbols, description) VALUES ('${indexName}','${symbols.join(',')}','') ON DUPLICATE KEY UPDATE symbols=VALUES(symbols)`;
-   return db.query(query)
+   let query = `INSERT INTO indexes (name, symbols, description) VALUES ('${indexName}','${symbols.join(',')}','') 
+   ON DUPLICATE KEY UPDATE symbols=VALUES(symbols)`;
+   return db.query(query);
 }
 
 exports.saveIndexData = async (indexName, days)=>{

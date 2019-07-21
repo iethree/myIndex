@@ -5,7 +5,8 @@ function createIndexData(){
    let query = `CREATE TABLE indexData(
       name varchar(255),
       date bigint,
-      mktcap bigint
+      mktcap bigint,
+      primary key (name, date)
    )`;
    db.query(query)
    .then((result)=>{
