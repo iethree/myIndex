@@ -21,19 +21,19 @@ const _ = require('lodash');
 function calculate(prices){
    var uniqueStocks = _.uniqBy(prices, 'symbol').length;
    var index = [], dayPrices = [];
-   var date = new Date(prices[0].date*1000);
+   var date = shortEST(prices[0].date);
 
    for(let price of prices){
-      if(datefns.isSameDay(date, new Date(price.date*1000))) 
+      if(date===shortEST(price.date)) 
          dayPrices.push(price.mktcap);
       else{
-         date = new Date(price.date*1000); //next day in data
+         date = shortEST(price.date); //next day in data
          dayPrices = [price.mktcap]; //reset dayPrices
       }
 
       if(uniqueStocks==dayPrices.length){ // average when we have the whole day
          index.push({
-            date: Math.round(date.getTime()/1000), 
+            date: date, 
             mktcap: average(dayPrices)
          });  
       }
@@ -49,4 +49,17 @@ function average(dayPrices){
    return average;
 }
 
+//date helper functions
+function UTCtoEST(unix){
+   var local = tz.convertToLocalTime(unix, {timeZone: 'Etc/GMT'});
+   return tz.convertToTimeZone(local, {timeZone: 'US/Eastern'});
+}
+
+function short(date){
+   return datefns.format(date, 'YYYY-MM-DD');
+}
+
+function shortEST(unix){
+   return short(UTCtoEST(unix));
+}
 module.exports = calculate;

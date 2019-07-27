@@ -1,6 +1,9 @@
 const db = require("./db.js");
 const log = require('./log.js');
 const calculateIndex = require('./index-calc');
+const datefns = require('date-fns');
+const tz = require('date-fns-timezone');
+
 
 /**
  * gets a single symbol's data
@@ -10,7 +13,7 @@ const calculateIndex = require('./index-calc');
  * @returns {promise} resolves data or rejects error
  */
 exports.getSymbol =  async (symbol, duration = 90)=>{
-   let query = `select * from prices where symbol="${symbol}" LIMIT ${duration}`;
+   let query = `select * from prices WHERE symbol="${symbol}" AND date > ${daysagounix(90)}`;
 
    return db.query(query);
 }
@@ -22,9 +25,9 @@ exports.getSymbol =  async (symbol, duration = 90)=>{
  * @param {number} duration days of prices
  * @returns {promise} resolves data or rejects error
  */
-exports.getSymbols =  async (symbols, duration = 90)=>{
+exports.getSymbols =  async (symbols, days = 90)=>{
 	var symbolList= symbols.join("','");
-   let query = `select * from prices where symbol IN ('${symbolList}') ORDER BY date DESC LIMIT ${(duration*symbols.length)}`;
+   let query = `select * from prices WHERE symbol IN ('${symbolList}') AND date > ${daysagounix(days)} ORDER BY date DESC`;
    return db.query(query);
 }
 /**
@@ -104,3 +107,14 @@ exports.deleteIndex = async(name)=>{
          reject({status: false});
    });
 }
+
+function daysago(days){
+   return datefns.subDays(new Date(), days);
+}
+
+function daysagounix(days){
+   return daysago(days).getTime();
+}
+
+
+

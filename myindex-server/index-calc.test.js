@@ -4,37 +4,37 @@ var calc = require('./index-calc');
 var datefns = require('date-fns');
 
 test('2 stocks 2 days', ()=>{
-   var day1 = new Date().getTime();
-   var day2 = datefns.addDays(day1, 1).getTime();
+   var day1 = new Date()
+   var day2 = datefns.subDays(day1, 1)
    var twoStockPrices = [
       {  
-         date: day1,
+         date: day1.getTime(),
          symbol: 'AAA',
          mktcap: 100
       },
       {  
-         date: day1,
+         date: day1.getTime(),
          symbol: 'BBB',
          mktcap: 200
       },
       {  
-         date: day2,
+         date: day2.getTime(),
          symbol: 'AAA',
          mktcap: 200
       },
       {  
-         date: day2,
+         date: day2.getTime(),
          symbol: 'BBB',
          mktcap: 300
       }
    ];
    var twoStockIndex = [
       {
-         date: day1,
+         date: datefns.format(day1, "YYYY-MM-DD"),
          mktcap: 150
       },
       {
-         date: day2,
+         date: datefns.format(day2, "YYYY-MM-DD"),
          mktcap: 250
       }
    ];
@@ -44,7 +44,7 @@ test('2 stocks 2 days', ()=>{
 
 test('Bad Data Average', ()=>{
    var day1 = new Date().getTime();
-   var day2 = datefns.addDays(day1, 1).getTime();
+   var day2 = datefns.subDays(day1, 1).getTime();
    var badData = [
       {  
          date: day1,
@@ -73,28 +73,28 @@ test('Bad Data Average', ()=>{
 });
 
 test('Half Bad Data Average', ()=>{
-   var day1 = new Date().getTime();
-   var day2 = datefns.addDays(day1, 1).getTime();
+   var day1 = new Date();
+   var day2 = datefns.subDays(day1, 1);
    var halfBadData = [
       {  
-         date: day1,
+         date: day1.getTime(),
          symbol: 'AAA',
          mktcap: 100
       },
       {  
-         date: day1,
+         date: day1.getTime(),
          symbol: 'BBB',
          mktcap: 200
       },
       {  
-         date: day2,
+         date: day2.getTime(),
          symbol: 'AAA',
          mktcap: 200
       }
    ];
    var halfIndex = [
       {
-         date: day1,
+         date: datefns.format(day1, "YYYY-MM-DD"),
          mktcap: 150
       }
    ];
@@ -124,14 +124,14 @@ test('test 50 days of 50 stock prices with 1 popped', ()=>{
 
 function makeSimpleIndex(symbols, days){
    var prices = [], index=[];
-   var date = new Date().getTime();
+   var date = new Date();
    for(let d=1; d<=days; d++){
       date = datefns.subDays(date, 1);
-      index.push({date: Math.round(date.getTime()/1000), mktcap: d*100});
+      index.push({date: datefns.format(date, "YYYY-MM-DD"), mktcap: d*100});
 
       for(let s=1; s<=symbols; s++){
          prices.push({
-            date: date.getTime()/1000,
+            date: date.getTime(),
             symbol: "stock_"+s,
             mktcap: d*100
          });

@@ -1,7 +1,7 @@
 //myindex-data tests
 
 const data = require('./myindex-data');
-const DAYS = 90;
+const DAYS = 200;
 
 test('create new index', async ()=>{
    var value = await data.saveIndex('newIndex', ['aapl', 'goog'])
@@ -11,7 +11,8 @@ test('create new index', async ()=>{
 test(`calculate index prices for ${DAYS} days`, async()=>{
    var result = await data.saveIndexData('newIndex', DAYS);
    expect(result.status).toBe(true);
-   expect(result.data.affectedRows).toBe(DAYS);
+   console.log(result.data.affectedRows);
+   expect(result.data.affectedRows).toBeTruthy();
 });
 
 test(`get ${DAYS} index prices`, async()=>{
@@ -27,18 +28,17 @@ test('delete new index', async()=>{
    expect(deleteResult.data).toBe(DAYS);
 });
 
-describe('index integrity tests', ()=>{
-   data.getIndexList()
-   .then((indexList)=>{
-      for (let index of indexList.data){
-         test(`${index.name} integrity for ${DAYS} days`, async()=>{
-            let priceData = await exports.getSymbols(index.symbols.split(','), DAYS);
-            expect(priceData.status).toBe(true);
-            expect(priceData.data.length).toBe(DAYS);
-         });
-      }
-   });
+test('check index integrity', async()=>{
+   var indexList = await data.getIndexList();
+   
+   for (let index of indexList.data){
+      let symbols = index.symbols.split(',');
+      let priceData = await data.getSymbols(symbols, DAYS);
+      expect(priceData.status).toBe(true);
+      expect(priceData.data.length).toBe(DAYS*symbols.length);
+   }
 });
+
 
 
 // test(`backfill existing indexes for ${DAYS} days`, async()=>{
