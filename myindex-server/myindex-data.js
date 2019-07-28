@@ -108,6 +108,14 @@ exports.deleteIndex = async(name)=>{
    });
 }
 
+exports.saveAllIndexes(days){
+   var indexList = await data.getIndexList();
+   
+   for (let index of indexList.data){
+      await data.saveIndexData(index.name, days);
+   }
+}
+
 function daysago(days){
    return datefns.subDays(new Date(), days);
 }

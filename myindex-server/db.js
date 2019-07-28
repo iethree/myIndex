@@ -2,7 +2,6 @@
 require('dotenv').config();
 const dbserver = require('mysql');
 const log = require ('./log.js');
-
 log.debug(process.env.DB_HOST);
 
 var db = dbserver.createConnection({
@@ -13,10 +12,9 @@ var db = dbserver.createConnection({
 });
 
 db.connect((err)=>{
-	if (err) log.err('database connection error', err);
-	else 		log.success('databse connection established');
- });
-
+   if (err) log.err('database connection error', err);
+   else     log.success('databse connection established');
+});
 
  /**
  * helper function to make database queries
@@ -56,5 +54,9 @@ var queryData= async(query, data)=>{
       });
    });
 }
+
+var isConnected = async()=>{
+
+};
 
 module.exports = {query: query, queryData: queryData};
