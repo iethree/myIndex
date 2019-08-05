@@ -3,18 +3,44 @@ import {Link} from 'react-router-dom';
 import {fetcher} from './utilities';
 import {StockChart} from './StockChart';
 
-const DAYS = 10;
+const DAYS = 30;
 
 export function Home(props){
-   var [chartData, setChartData] = useState([]);
+   var [indexData, setIndexData] = useState([]);
+   var [chartData, setChartData] = useState({});
+   var [progress, setProgress] = useState(0);
+   var showCnt=0;
    
    useEffect( ()=>{
+      setInterval(()=>{
+         if(showCnt<indexData.length-1) showCnt++;
+         else showCnt=0;
+         setChartData(indexData[showCnt]);
+      }, 5000);
       getData();
+
+      
    },[]);
+
    async function getData(){
+      let cnt=0;
+      console.log(props.indexes);
       for (let index of props.indexes){
-         let indexData = await fetcher(`data/index/${index.name}/${DAYS}`)
-         setChartData([...chartData, indexData]);
+         let data = await fetcher(`data/index/${index.name}/${DAYS}`);
+
+         if(data.data.length){
+            let newData = {
+               data: data.data, 
+               name: index.name
+            };
+            indexData.push(newData);
+            setIndexData(indexData);
+            if(indexData.length==1) setChartData(indexData[0]);
+         }
+         
+         //update progress bar
+         cnt++;
+         setProgress(Math.floor((cnt/props.indexes.length)*100));
       }
    };
 
@@ -35,20 +61,22 @@ export function Home(props){
          </div>
          <div className="home-content">
             <div className="animated fadeIn has-text-centered">
-               <StockChart data = {chartData[0]} />
+               <StockChart data = {[chartData]} days = {DAYS} />
                <br />
-               <progress className="progress is-warning" value="0" max="100">
-                  Loading
-               </progress>
+               <Progress percent={progress} />
             </div>
          </div>
       </section>
    );
 }
 
-function prepData(indexData){
-   var data = [], labels = [];
-   
-
-   return {data: data, dates: labels};
+function Progress(props){
+   if(props.percent<100)
+      return(
+         <progress className="progress is-warning" value={props.percent} max="100">
+            Loading...
+         </progress>
+      );
+   else
+      return null;
 }

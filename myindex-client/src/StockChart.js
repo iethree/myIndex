@@ -1,25 +1,79 @@
 import React, {useState, useEffect} from 'react';
+import * as datefns from 'date-fns';
 
 import {Line} from 'react-chartjs-2';
 
-const DAYS = 90;
-
 export function StockChart(props){
-   var chartConfig = {
-      
-   };
+   var chartConfig = {};
+
+   var labels = getWeekdays(props.days);
+   var showlabels = shortlabels(labels);
    var data = {
-      labels: ['day1', 'day2', 'day3', 'day4'],
-      datasets: [{
-         data: [20, -20, null,  30],  
-         label: "set name", 
-         fill: false, 
-         borderColor: '#603', 
-         backgroundColor: "#603",
-         spanGaps: true,
-      }]
+      labels: showlabels,
+      datasets: prepData(props.data, labels),
    };
 
    return(<Line data = {data} options = {chartConfig} height = {300} width={500} />);
    
+}
+/** get YYYY-MM-DD weekdays for the specified number of days in the past
+ * 
+ */
+
+function getWeekdays(days){
+   var dateList = [];
+   var today = new Date();
+   
+   for(let cnt=days; cnt>0; cnt--){
+      var day = datefns.subDays(today, cnt);
+      if (!datefns.isWeekend(day))
+         dateList.push(datefns.format(day, "YYYY-MM-DD"));
+   }
+   return dateList;
+}
+//chopthe first 5 characters off each label
+function shortlabels(labels){
+   var shortLabels = []
+   for(let label in labels){
+      shortLabels.push(datefns.format(new Date(labels[label]), "MMM D"));
+   }
+   return shortLabels;
+}
+
+function prepData(data, labels){
+   var datasets = [];
+   
+   for (let set of data){
+      let firstPrice = null;
+      if(!set.data)
+         continue;
+      let tempData = [];
+      for(let label of labels){
+         let match = set.data.find((el)=>{
+            if(el.date===label)
+               return el;
+         });
+
+         if(match) {
+            if(firstPrice===null) firstPrice=match.mktcap;
+            tempData.push( percentChange(match.mktcap, firstPrice) );
+         }
+         else
+            tempData.push(null);
+      }
+      console.log(set.name, tempData);
+      datasets.push({
+         data: tempData,  
+         label: set.name, 
+         fill: false, 
+         borderColor: 'hsl(2, 83%, 54%)', 
+         backgroundColor: 'hsl(2, 83%, 54%)',
+         spanGaps: true,
+      });
+   }
+   return datasets;
+}
+
+function percentChange(newNumber, originalNumber){
+   return Math.round((newNumber-originalNumber)/originalNumber *1000) / 10;
 }

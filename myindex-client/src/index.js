@@ -31,7 +31,7 @@ export default function App(props){
         setSymbols(symbolList.data);
     });
 
-    fetcher('/data/index')
+    fetcher('/data/indexes')
     .then(indexList=>{
       if(indexList.status)
         setIndexes(indexList.data); 
@@ -44,8 +44,8 @@ export default function App(props){
       <Header />
       <Switch>
         <Route path="/about" component={About} />
-        <Route path="/browse" component={Browse} />
-        <Route path="/make" component={Make} />
+        <Route path="/browse" render={()=><Browse indexes={indexes} />} />
+        <Route path="/make" render={()=><Make symbols={symbols} />} />
         <Route path="/" render={()=><Home indexes={indexes} />} />
       </Switch>
       <Footer />

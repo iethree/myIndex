@@ -25,8 +25,8 @@ router.post('/data/index', (req, res, next)=>{
 	.then(result=>res.send(result).status(201))
 	.catch(err=>res.send(err).status(400));
 });
-
-router.get('/data/index', (req, res, next)=>{
+ 
+router.get('/data/indexes', (req, res, next)=>{
 	data.getIndexList()
 	.then(result=>res.send(result).status(200))
 	.catch(err=>res.send(err).status(400));

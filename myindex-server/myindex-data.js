@@ -93,8 +93,8 @@ exports.getIndex = async(name)=>{
    return db.query(query);
 };
 
-exports.getIndexData = async(name, duration = 90)=>{
-   let query = `SELECT * FROM indexdata WHERE name='${name}' ORDER BY date DESC LIMIT ${duration}`;
+exports.getIndexData = async(name, days = 90)=>{
+   let query = `SELECT date, mktcap FROM indexdata WHERE name='${name}' AND date > '${daysagosimple(days)}' ORDER BY date ASC`;
    return db.query(query);
 }
 
@@ -122,6 +122,10 @@ exports.saveAllIndexes = async(days)=>{
 
 function daysago(days){
    return datefns.subDays(new Date(), days);
+}
+
+function daysagosimple(days){
+   return datefns.format(daysago(days),"YYYY-MM-DD");
 }
 
 function daysagounix(days){
