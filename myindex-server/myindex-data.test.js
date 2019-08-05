@@ -1,7 +1,8 @@
 //myindex-data tests
 
 const data = require('./myindex-data');
-const DAYS = 180;
+const _ = require('lodash');
+const DAYS = 30;
 
 test('create new index', async ()=>{
    var value = await data.saveIndex('newIndex', ['aapl', 'goog'])
@@ -28,14 +29,13 @@ test('delete new index', async()=>{
    expect(deleteResult.data).toBeTruthy();
 });
 
-test('check index integrity', async()=>{
-   var indexList = await data.getIndexList();
-   
-   for (let index of indexList.data){
-      let indexSave = await data.saveIndexData(index.name, DAYS);
-      expect(indexSave.status).toBe(true);
-      console.log(index.name, indexSave.data.affectedRows);
-   }
+test('check index', async()=>{
+   var index = await data.getIndex('S&P 500 (manual)');
+   var priceData = await data.getSymbols(index.data[0].symbols.split(','), DAYS);
+   var counts = _.countBy(priceData.data, 'symbol');
+
+   console.log(counts)
+   expect(counts).toBeTruthy();
 });
 
 

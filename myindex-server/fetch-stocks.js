@@ -8,6 +8,10 @@ console.log("Starting fetch-stocks at "+new Date());
 
 //fetch daily prices
 setTimeout(fetchAllPrices, 2000);
+// setTimeout(()=>{
+// 	//save all symbols to db
+// 	fetchSymbolList(saveSymbolList);
+// }, 2000);
 setTimeout(process.exit, 90*1000);
 
 //fetch 100 at a time (API limit), then save to DB
@@ -22,8 +26,9 @@ async function fetchAllPrices(){
 		let prices = await fetchPrices(symbols.slice(cnt-100, cnt));
 		savePrices(prices);
 	}
+	cnt-=100;
 	console.log('requesting: '+cnt);
-	let prices = fetchPrices(symbols.slice(cnt, symbols.length));//save last batch of less than 100
+	let prices = await fetchPrices(symbols.slice(cnt, symbols.length));//save last batch of less than 100
 	savePrices(prices);
 }
 
@@ -105,8 +110,7 @@ function savePrices(priceData){
 }
 
 
-//save all symbols to db
-//fetchsymbolList(saveSymbolList);
+
 
 //get symobls from IEX
 function fetchSymbolList(callback){
@@ -129,7 +133,7 @@ function fetchSymbolList(callback){
 
 function saveSymbolList(results){
 	
-	var query = "INSERT INTO symbols (symbol, name, type) VALUES ?";	
+	var query = "INSERT INTO symbols (symbol, name, type) VALUES ? ON DUPLICATE KEY UPDATE symbol=symbol";	
 	var alldata = results.map((i)=>{return [i.symbol, i.name, i.type]});
 	
 	db.query(query, [alldata], function(err, results, fields){

@@ -12,8 +12,8 @@ const tz = require('date-fns-timezone');
  * @param {number} duration days of prices
  * @returns {promise} resolves data or rejects error
  */
-exports.getSymbol =  async (symbol, duration = 90)=>{
-   let query = `select * from prices WHERE symbol="${symbol}" AND date > ${daysagounix(90)}`;
+exports.getSymbol =  async (symbol, days = 90)=>{
+   let query = `select * from prices WHERE symbol="${symbol}" AND date > ${daysagounix(days)}`;
 
    return db.query(query);
 }
@@ -79,7 +79,7 @@ exports.saveIndexData = async (indexName, days)=>{
    });
    log.info(writeData[0][0], 'prices:', writeData.length );
    
-   query = `INSERT INTO indexdata (name, date, mktcap) VALUES ? ON DUPLICATE KEY UPDATE date=date`;
+   query = `INSERT INTO indexdata (name, date, mktcap) VALUES ? ON DUPLICATE KEY UPDATE mktcap=mktcap`;
    
    return db.queryData(query, writeData);
 }
@@ -88,6 +88,10 @@ exports.getIndexList = async()=>{
    let query = `SELECT * FROM indexes`;
    return db.query(query);
 }
+exports.getIndex = async(name)=>{
+   let query = `SELECT * FROM indexes WHERE name='${name}'`;
+   return db.query(query);
+};
 
 exports.getIndexData = async(name, duration = 90)=>{
    let query = `SELECT * FROM indexdata WHERE name='${name}' ORDER BY date DESC LIMIT ${duration}`;
@@ -108,7 +112,7 @@ exports.deleteIndex = async(name)=>{
    });
 }
 
-exports.saveAllIndexes(days){
+exports.saveAllIndexes = async(days)=>{
    var indexList = await data.getIndexList();
    
    for (let index of indexList.data){

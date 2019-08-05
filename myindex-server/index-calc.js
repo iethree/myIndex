@@ -9,13 +9,13 @@ const _ = require('lodash');
  * discards any days that dont have data from all symbols
  * 
  * @param {array} prices array of price objects sorted by date descending
- *  @property {number} date a unix timestamp
+ *  @property {number} date a unix UTC timestamp
  *  @property {string} symbol 
  *  @property {number} mktcap
  *  @property {number} price
  * 
  * @returns {array} an array of index price objects
- *  @property {number} date
+ *  @property {string} date "yyyy-mm-dd"
  *  @property {number} mktcap
  */
 function calculate(prices){
