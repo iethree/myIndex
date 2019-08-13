@@ -42,10 +42,10 @@ function shortlabels(labels){
 
 function prepData(data, labels){
    var datasets = [];
-   
+   var colorMaker = getColor();
    for (let set of data){
       let firstPrice = null;
-      if(!set.data)
+      if(!set || !set.data)
          continue;
       let tempData = [];
       for(let label of labels){
@@ -62,16 +62,32 @@ function prepData(data, labels){
             tempData.push(null);
       }
       console.log(set.name, tempData);
+      
+      let color = colorMaker();
+      console.log(color);
       datasets.push({
          data: tempData,  
          label: set.name, 
          fill: false, 
-         borderColor: 'hsl(2, 83%, 54%)', 
-         backgroundColor: 'hsl(2, 83%, 54%)',
+         borderColor: color, 
+         backgroundColor: color,
          spanGaps: true,
       });
    }
    return datasets;
+}
+
+function getColor(){
+   var colors =[218, 0,30,60,90,120,150,180,210,240,270,300,330,360];
+   var cnt=0;
+   return ()=>{
+      if(cnt<colors.length)
+         cnt++;
+      else
+         cnt=0;
+      console.log(cnt);
+      return `hsl(${colors[cnt]},70%,55%)`
+   }
 }
 
 function percentChange(newNumber, originalNumber){

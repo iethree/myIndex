@@ -18,8 +18,6 @@ export function Home(props){
          setChartData(indexData[showCnt]);
       }, 5000);
       getData();
-
-      
    },[]);
 
    async function getData(){

@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var data = require('./myindex-data.js');
 
-router.get('/data/symbolData/:symbols/:duration?', (req, res, next)=>{
+router.get('/data/symbols/:symbols/:duration?', (req, res, next)=>{
 	var symbols;
 	if(req.params.symbols.includes(','))
 		symbols = req.params.symbols.split(',');

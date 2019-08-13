@@ -44,7 +44,7 @@ export default function App(props){
       <Header />
       <Switch>
         <Route path="/about" component={About} />
-        <Route path="/browse" render={()=><Browse indexes={indexes} />} />
+        <Route path="/browse" render={()=><Browse indexes={indexes} symbols={symbols} />} />
         <Route path="/make" render={()=><Make symbols={symbols} />} />
         <Route path="/" render={()=><Home indexes={indexes} />} />
       </Switch>
@@ -54,13 +54,17 @@ export default function App(props){
 }
 
 function Header(props){
+  function toggleActive(){
+    document.querySelector(".navbar-burger").classList.toggle("is-active");
+    document.querySelector(".navbar-menu").classList.toggle("is-active");
+  }
   return(
     <section className="hero is-link is-small">
       <div className="hero-head">
         <nav className="navbar" role="navigation">
           <div className="navbar-brand">
             <Link className="navbar-item" to="/">myIndex</Link>
-            <button className="button navbar-burger is-link">
+            <button className="button navbar-burger is-link" onClick={toggleActive}>
               <span />
               <span />
               <span />
