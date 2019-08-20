@@ -23,11 +23,11 @@ var query= async(query)=>{
    return new Promise((resolve, reject)=>{
       db.query(query, function(err, results, fields){
          if (err)            
-            reject({status: false, message: err});
+            reject(err);
          else if (results) 
-            resolve({status: true, data: results})
+            resolve(results)
          else                
-            reject({status: false});
+            reject(false);
       });
    }).catch(log.err);
 }

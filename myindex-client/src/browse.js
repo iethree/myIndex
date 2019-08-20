@@ -15,7 +15,7 @@ export function Browse(props){
       if(newList.length===chartData.length){
          let data = await fetcher(`data/index/${name}/${days}`);
          let newData = {
-            data: data.data, 
+            data: data, 
             name: name
          };
          setChartData ( [...chartData, newData]);
@@ -44,7 +44,9 @@ export function Browse(props){
       <div className="padded">
          <div className="columns">
             <aside className="menu column">
+               
                <div className="menu-label" >
+                  
                   <span id="showToggle" onClick={hideChildren}>User Indexes <i id="caret" className="fa fa-caret-up" /></span>
                   <ul className="menu-list">
                      {props.indexes ? props.indexes.map(index=>
@@ -52,7 +54,9 @@ export function Browse(props){
                               <button  className="button is-size-7 index-tab linkbutton" onClick={e=>getIndexData(e, index.name)} > {index.name} </button>
                            </li>
                      ) : null }
+                     
                   </ul>
+
                </div>
             </aside>
             <div className="column has-text-centered">
@@ -73,7 +77,7 @@ function DateRange(props){
    return(
       <div className="has-text-centered"> 
          <DayButton key="30"  days = {30}  current={props.days} setDays={props.setDays}/>
-         <DayButton key="90"  days = {90} current={props.days} setDays={props.setDays}/>
+         <DayButton key="90"  days = {90}  current={props.days} setDays={props.setDays}/>
          <DayButton key="180" days = {180} current={props.days} setDays={props.setDays}/>
           days
       </div>
@@ -81,7 +85,7 @@ function DateRange(props){
 }
 function DayButton(props){
 
-   var current = props.current==props.days ? "is-active" : '';
+   var current = props.current===props.days ? "is-active" : '';
 
    return(
       <button 

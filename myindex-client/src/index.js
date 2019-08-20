@@ -27,17 +27,21 @@ export default function App(props){
 
     fetcher('/data/symbolList')
     .then(symbolList=>{
-      if(symbolList.status)
-        setSymbols(symbolList.data);
+      if(symbolList)
+        setSymbols(symbolList);
     });
 
     fetcher('/data/indexes')
     .then(indexList=>{
-      if(indexList.status)
-        setIndexes(indexList.data); 
+      if(indexList)
+        setIndexes(indexList); 
     });
     
   },[]);
+
+  function newIndex(index){
+    setIndexes([index, ...indexes]);
+  }
 
   return(
     <Router>
@@ -45,7 +49,7 @@ export default function App(props){
       <Switch>
         <Route path="/about" component={About} />
         <Route path="/browse" render={()=><Browse indexes={indexes} symbols={symbols} />} />
-        <Route path="/make" render={()=><Make symbols={symbols} />} />
+        <Route path="/make" render={()=><Make indexes = {indexes} newIndex={newIndex} symbols={symbols} />} />
         <Route path="/" render={()=><Home indexes={indexes} />} />
       </Switch>
       <Footer />
@@ -87,6 +91,7 @@ function Header(props){
     </section>
   );
 }
+
 function Footer(props){
   return(
     <footer className="footer is-small">

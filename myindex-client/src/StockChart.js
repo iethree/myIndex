@@ -31,7 +31,8 @@ function getWeekdays(days){
    }
    return dateList;
 }
-//chopthe first 5 characters off each label
+
+//get shorter date labels for display
 function shortlabels(labels){
    var shortLabels = []
    for(let label in labels){

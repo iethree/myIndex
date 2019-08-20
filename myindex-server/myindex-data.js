@@ -14,8 +14,17 @@ const tz = require('date-fns-timezone');
  */
 exports.getSymbol =  async (symbol, days = 90)=>{
    let query = `select * from prices WHERE symbol="${symbol}" AND date > ${daysagounix(days)}`;
-
-   return db.query(query);
+   var data = {};
+   var result = await db.query(query);
+   
+   for (let s of result){
+      s.date= datFns.format
+      if(data.hasOwnProperty(s.symbol))
+         data[s.symbol].push(s);
+      else
+         data[s.symbol]=[s];
+   }
+   
 }
 
 /**
@@ -28,6 +37,7 @@ exports.getSymbol =  async (symbol, days = 90)=>{
 exports.getSymbols =  async (symbols, days = 90)=>{
 	var symbolList= symbols.join("','");
    let query = `select * from prices WHERE symbol IN ('${symbolList}') AND date > ${daysagounix(days)} ORDER BY date DESC`;
+
    return db.query(query);
 }
 /**
